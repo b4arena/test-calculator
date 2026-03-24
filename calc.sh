@@ -2,12 +2,15 @@
 # calc.sh — Simple integer calculator.
 # Usage: calc.sh <num1> <op> <num2>
 #        calc.sh fact <num>
-# Supported operators: + - x / pow fact
+#        calc.sh neg <num>
+# Supported operators: + - x / pow fact neg
 # BUG: no division-by-zero check
 # BUG: no modulo support
 set -euo pipefail
 
-if [[ "$1" == "fact" ]]; then
+if [[ "$1" == "neg" ]]; then
+  echo $(( -$2 ))
+elif [[ "$1" == "fact" ]]; then
   N="$2"
   if (( N < 0 )); then
     echo "Error: factorial of negative number" >&2

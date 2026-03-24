@@ -39,6 +39,11 @@ check "1024" 2 pow 10
 check "3" 10 min 3
 check "10" 10 mx 3
 
+# Negation
+check "-5" neg 5
+check "3" neg -3
+check "0" neg 0
+
 # Factorial
 check "120" fact 5
 check "1" fact 0
