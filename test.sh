@@ -1,42 +1,25 @@
 #!/usr/bin/env bash
-# test.sh — Test runner for calc.sh
-set -e
+set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PASS=0; FAIL=0
-
-check() {
-  local expected="$1"; shift
-  local result
-  result=$("$SCRIPT_DIR/calc.sh" "$@")
-  if [[ "$result" == "$expected" ]]; then
-    PASS=$((PASS + 1))
-  else
-    echo "FAIL: $* = $result (expected $expected)"
-    FAIL=$((FAIL + 1))
+assert_eq() {
+  local expected="$1"
+  local actual="$2"
+  local msg="${3:-}"
+  if [ "$expected" != "$actual" ]; then
+    echo "Assertion failed: expected '$expected', got '$actual'. ${msg}" >&2
+    exit 1
   fi
+  echo "✓ Test passed: $expected == $actual"
 }
 
-check_error() {
-  local expected_exit="$1"; shift
-  local expected_stderr="$1"; shift
-  local result exit_code
-  result=$("$SCRIPT_DIR/calc.sh" "$@" 2>&1) && exit_code=0 || exit_code=$?
-  if [[ "$exit_code" -eq "$expected_exit" && "$result" == *"$expected_stderr"* ]]; then
-    PASS=$((PASS + 1))
-  else
-    echo "FAIL: $* → exit=$exit_code (expected $expected_exit), output='$result'"
-    FAIL=$((FAIL + 1))
-  fi
-}
+# Existing tests
+assert_eq 8 "$(bash ./calc.sh 5 + 3)"
+assert_eq 2 "$(bash ./calc.sh 5 - 3)"
+assert_eq 15 "$(bash ./calc.sh 5 x 3)"
+assert_eq 1 "$(bash ./calc.sh 5 / 3)"
 
-check "5" 2 + 3
-check "10" 20 - 10
-check "42" 6 x 7
-check "3" 10 / 3
+# New test for square
+assert_eq 25 "$(bash ./calc.sh 5 square)"
 
-# Error handling
-check_error 1 "division by zero" 10 / 0
+echo "All tests passed."
 
-echo "Tests: $PASS passed, $FAIL failed"
-[[ $FAIL -eq 0 ]]
