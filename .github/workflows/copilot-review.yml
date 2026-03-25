@@ -1,0 +1,17 @@
+name: Copilot Code Review
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+jobs:
+  copilot-review:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Copilot review
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN_COPILOT_REVIEW }}
+        run: |
+          gh api --method POST \
+            "/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers" \
+            -f "reviewers[]=copilot-pull-request-reviewer[bot]"
