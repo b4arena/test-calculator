@@ -47,6 +47,11 @@ check("10", "20", "-", "10")
 check("42", "6", "x", "7")
 check("3",  "10", "/", "3")
 
+# ── Cube ─────────────────────────────────────────────────────────────────────
+check("125", "5",  "cube")          # positive number
+check("0",   "0",  "cube")          # zero returns 0
+check("-27", "-3", "cube")          # negative number returns negative cube
+
 # ── Error handling ────────────────────────────────────────────────────────────
 check_error(1, "division by zero", "10", "/", "0")
 check_error(1, "Unknown operator",  "5", "?", "3")
