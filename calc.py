@@ -5,7 +5,7 @@ Usage: calc.py <num1> <op> [<num2>]
 Supported operators: + - x / cube
 
 Mirrors the behaviour of calc.sh:
-  - All operands and results are integers (floor division for /)
+  - All operands and results are integers (truncating division for /)
   - Use 'x' for multiplication (avoids shell glob expansion)
   - Prints result to stdout; errors go to stderr with exit code 1
 """
